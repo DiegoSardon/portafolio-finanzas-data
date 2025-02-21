@@ -1,0 +1,28 @@
+name: Ejecutar Pruebas del Proyecto
+
+# Se activará en cada push o pull request
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clonar repositorio
+      uses: actions/checkout@v2
+
+    - name: Configurar Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Ejecutar análisis
+      run: python src/analisis.py
+
+    - name: Ejecutar descarga de datos (modo test)
+      run: python src/descargar_datos.py AAPL 2022-01-01 2022-12-31 ../data/precios_AAPL_test.csv
